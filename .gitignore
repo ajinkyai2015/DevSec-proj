@@ -1,0 +1,11 @@
+# Ignore Terraform files and folders
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Ignore large files
+.terraform/providers/registry.terraform.io/hashicorp/aws/5.72.1/darwin_arm64/terraform-provider-aws_v5.72.1_x5
+
+# Other general ignores
+.DS_Store
+.terraform.lock.hcl
