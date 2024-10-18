@@ -55,6 +55,7 @@ resource "aws_instance" "bastion_host" {
   ami           = "ami-005fc0f236362e99f" # Replace with an appropriate AMI for your region
   instance_type = "t2.micro"  # Use the instance type you need
   subnet_id     = aws_subnet.public_subnet.id
+  key_name           = "cicd-pipeline"
 
   # Security group for Bastion host to allow SSH
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
