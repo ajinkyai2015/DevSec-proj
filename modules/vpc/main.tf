@@ -150,7 +150,7 @@ resource "aws_security_group" "private_instance_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_instance.bastion_host.private_ip]  # Allow SSH from Bastion Host
+    cidr_blocks = ["${aws_instance.bastion_host.private_ip}/32"]  # Allow SSH from Bastion Host's private IP
   }
 
   egress {
