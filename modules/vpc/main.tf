@@ -176,8 +176,9 @@ resource "aws_instance" "private_instance_2" {
 
 # Allocate an Elastic IP for the NAT Gateway
 resource "aws_eip" "nat_eip" {
-  domain = "vpc"
+  domain = "vpc"  # Use the updated attribute
 }
+
 
 # NAT Gateway in the Public Subnet
 resource "aws_nat_gateway" "nat" {

@@ -22,3 +22,8 @@ output "private_instance_1_private_ip" {
 output "private_instance_2_private_ip" {
   value = aws_instance.private_instance_2.private_ip
 }
+
+output "private_route_table_id" {
+  description = "The ID of the private route table"
+  value       = aws_route_table.private.id  # Output the ID of the private route table
+}
