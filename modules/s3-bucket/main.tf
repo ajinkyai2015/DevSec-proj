@@ -20,15 +20,19 @@ resource "aws_s3_bucket_public_access_block" "block_public_access" {
 
 resource "aws_s3_bucket_policy" "this" {
   bucket = aws_s3_bucket.this.bucket
+
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = ["s3:GetObject", "s3:PutObject"]
-        Effect    = "Allow"
-        Resource  = "${aws_s3_bucket.this.arn}/*"
-        Principal = "*"
+        Action    = "s3:*",
+        Effect    = "Allow",
+        Resource  = "${aws_s3_bucket.this.arn}/*",
+        Principal = {
+          "AWS": "arn:aws:iam::339146967744:root"  # Replace ACCOUNT_ID with your actual AWS account ID
+        }
       }
     ]
   })
 }
+
