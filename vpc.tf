@@ -1,9 +1,5 @@
 # Root configuration to call the VPC module
 
-provider "aws" {
-  region = "us-east-1" # Set your AWS region here
-}
-
 module "vpc" {
   source     = "./modules/vpc"
   cidr_block = "10.0.0.0/16"
