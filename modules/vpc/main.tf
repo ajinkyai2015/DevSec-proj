@@ -99,6 +99,25 @@ output "bastion_host_public_ip" {
   value       = aws_instance.bastion_host.public_ip
 }
 
+
+# Find the latest Ubuntu 20.04 AMI
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["339146967744"]  # Canonical, the owner of official Ubuntu AMIs
+}
+
+
 # Private Subnet 1
 resource "aws_subnet" "private_subnet_1" {
   vpc_id                  = aws_vpc.main.id
