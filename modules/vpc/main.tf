@@ -99,24 +99,7 @@ output "bastion_host_public_ip" {
   value       = aws_instance.bastion_host.public_ip
 }
 
-
-# Find the latest Ubuntu 20.04 AMI
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["679593333241"]  # Canonical, the owner of official Ubuntu AMIs
-}
-
+######### Here Private Subnet Part Starts #########
 
 # Private Subnet 1
 resource "aws_subnet" "private_subnet_1" {
@@ -167,7 +150,7 @@ resource "aws_security_group" "private_instance_sg" {
 
 # EC2 Instance in Private Subnet 1
 resource "aws_instance" "private_instance_1" {
-  ami           = data.aws_ami.ubuntu.id  # Use the dynamic AMI data source defined earlier
+  ami           = "ami-005fc0f236362e99f"  # Directly using the specified AMI
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet_1.id
 
@@ -180,7 +163,7 @@ resource "aws_instance" "private_instance_1" {
 
 # EC2 Instance in Private Subnet 2
 resource "aws_instance" "private_instance_2" {
-  ami           = data.aws_ami.ubuntu.id  # Use the dynamic AMI data source defined earlier
+  ami           = "ami-005fc0f236362e99f"  # Directly using the specified AMI
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet_2.id
 
@@ -190,5 +173,3 @@ resource "aws_instance" "private_instance_2" {
     Name = "cicd-project-private-instance-2"
   }
 }
-
-
