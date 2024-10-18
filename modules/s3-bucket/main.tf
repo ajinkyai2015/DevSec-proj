@@ -1,9 +1,5 @@
 resource "aws_s3_bucket" "this" {
   bucket = var.bucket_name
-  versioning {
-    enabled = true
-  }
-  tags = var.tags
 }
 
 resource "aws_s3_bucket_versioning" "this" {
