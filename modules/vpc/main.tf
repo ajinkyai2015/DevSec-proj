@@ -114,7 +114,7 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["339146967744"]  # Canonical, the owner of official Ubuntu AMIs
+  owners = ["679593333241"]  # Canonical, the owner of official Ubuntu AMIs
 }
 
 
