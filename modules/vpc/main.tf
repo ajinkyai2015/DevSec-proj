@@ -87,3 +87,16 @@ resource "aws_security_group" "bastion_sg" {
   }
 }
 
+# Output the public subnet ID
+output "public_subnet_id" {
+  description = "The ID of the public subnet"
+  value       = aws_subnet.public_subnet.id
+}
+
+# Output the public IP of the Bastion Host
+output "bastion_host_public_ip" {
+  description = "The public IP of the Bastion Host"
+  value       = aws_instance.bastion_host.public_ip
+}
+
+
