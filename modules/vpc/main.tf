@@ -176,21 +176,35 @@ resource "aws_instance" "private_instance_2" {
 }
 
 
-# Elastic IP for NAT Gateway
+# Allocate an Elastic IP for the NAT Gateway
 resource "aws_eip" "nat_eip" {
-  vpc = true
+  domain = "vpc"  # Use the updated attribute
 }
 
-# NAT Gateway in the public subnet
+# NAT Gateway in the Public Subnet
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet.id  # Public Subnet ID from the VPC module
+  subnet_id     = aws_subnet.public_subnet.id  # Reference your public subnet
 }
 
-# Route table for private subnet to route traffic through NAT Gateway
+# Private Route Table for the Private Subnet
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "Private-Route-Table"
+  }
+}
+
+# Associate the Private Subnet with the Private Route Table
+resource "aws_route_table_association" "private_subnet_association" {
+  subnet_id      = aws_subnet.private_subnet.id  # Private Subnet ID
+  route_table_id = aws_route_table.private.id
+}
+
+# Route for Private Subnet to Use NAT Gateway
 resource "aws_route" "private_route" {
-  route_table_id         = aws_route_table.private.id  # Route Table for Private Subnet
+  route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
 }
-
