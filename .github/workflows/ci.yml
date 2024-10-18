@@ -22,8 +22,12 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"  # Ensure the region is set
         run: |
-          echo "AWS credentials configured"
+          echo "AWS credentials and region configured"
+
+      - name: Check AWS Credentials
+        run: env | grep AWS  # Check if AWS credentials are set
 
       - name: Terraform Init
         run: terraform init
