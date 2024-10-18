@@ -1,0 +1,22 @@
+# Root configuration to call the VPC module
+
+provider "aws" {
+  region = "us-east-1" # Set your AWS region here
+}
+
+module "vpc" {
+  source     = "./modules/vpc"
+  cidr_block = "10.0.0.0/16"
+}
+
+output "vpc_id" {
+  description = "The ID of the created VPC"
+  value       = module.vpc.vpc_id
+}
+
+# Output variables for the root configuration
+
+output "vpc_id" {
+  description = "The ID of the created VPC"
+  value       = module.vpc.vpc_id
+}
