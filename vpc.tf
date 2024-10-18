@@ -10,9 +10,3 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
-# Output variables for the root configuration
-
-output "vpc_id" {
-  description = "The ID of the created VPC"
-  value       = module.vpc.vpc_id
-}
