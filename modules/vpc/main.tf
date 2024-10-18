@@ -99,4 +99,77 @@ output "bastion_host_public_ip" {
   value       = aws_instance.bastion_host.public_ip
 }
 
+# Private Subnet 1
+resource "aws_subnet" "private_subnet_1" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"  # Define CIDR block for private subnet 1
+  availability_zone       = "us-east-1a"   # Adjust according to your region
+  map_public_ip_on_launch = false  # No public IPs for private subnet
+
+  tags = {
+    Name = "cicd-project-private-subnet-1"
+  }
+}
+
+# Private Subnet 2
+resource "aws_subnet" "private_subnet_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.3.0/24"  # Define CIDR block for private subnet 2
+  availability_zone       = "us-east-1b"   # Adjust according to your region
+  map_public_ip_on_launch = false  # No public IPs for private subnet
+
+  tags = {
+    Name = "cicd-project-private-subnet-2"
+  }
+}
+
+# Security Group for private instances to allow SSH access only from the Bastion Host
+resource "aws_security_group" "private_instance_sg" {
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [aws_instance.bastion_host.private_ip]  # Allow SSH from Bastion Host
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "cicd-project-private-instance-sg"
+  }
+}
+
+# EC2 Instance in Private Subnet 1
+resource "aws_instance" "private_instance_1" {
+  ami           = data.aws_ami.ubuntu.id  # Use the dynamic AMI data source defined earlier
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.private_subnet_1.id
+
+  vpc_security_group_ids = [aws_security_group.private_instance_sg.id]
+
+  tags = {
+    Name = "cicd-project-private-instance-1"
+  }
+}
+
+# EC2 Instance in Private Subnet 2
+resource "aws_instance" "private_instance_2" {
+  ami           = data.aws_ami.ubuntu.id  # Use the dynamic AMI data source defined earlier
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.private_subnet_2.id
+
+  vpc_security_group_ids = [aws_security_group.private_instance_sg.id]
+
+  tags = {
+    Name = "cicd-project-private-instance-2"
+  }
+}
+
 
