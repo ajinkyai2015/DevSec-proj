@@ -9,6 +9,7 @@ module "jenkins" {
   security_group_ids = [aws_security_group.ec2_sg.id]
   instance_name      = "Jenkins-Server"
   volume_size        = 20
+  user_data          = file("${path.module}/../scripts/jenkins_install.sh")
 }
 
 # SonarQube Server

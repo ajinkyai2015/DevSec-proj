@@ -33,3 +33,9 @@ variable "volume_size" {
   type        = number
   default     = 20  # 20 GB storage
 }
+
+variable "user_data" {
+  description = "Optional user data script to run on instance boot"
+  type        = string
+  default     = null  # No user_data by default
+}

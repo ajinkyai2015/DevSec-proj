@@ -9,6 +9,8 @@ resource "aws_instance" "ec2" {
     volume_size = var.volume_size
     volume_type = "gp2"
   }
+   # Only include user_data if it is provided
+  user_data = var.user_data
 
   tags = {
     Name = var.instance_name
