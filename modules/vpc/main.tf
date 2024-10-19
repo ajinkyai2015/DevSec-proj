@@ -199,8 +199,9 @@ resource "aws_route" "private_route" {
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
 
-  lifecycle {
-    ignore_changes = [destination_cidr_block]  # Prevent duplicate route error
+   lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [destination_cidr_block]  # Ignore route if it already exists
   }
 }
 
