@@ -1,4 +1,4 @@
-# Create a VPC resource with the given CIDR block
+# Create a VPC resource
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
 
@@ -16,10 +16,10 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# Public Subnet for Bastion Host access
+# Public Subnet for Bastion Host
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"  # Public subnet CIDR block
+  cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
@@ -85,18 +85,6 @@ resource "aws_security_group" "bastion_sg" {
   tags = {
     Name = "cicd-project-bastion-sg"
   }
-}
-
-# Output the public subnet ID
-output "public_subnet_id" {
-  description = "The ID of the public subnet"
-  value       = aws_subnet.public_subnet.id
-}
-
-# Output the public IP of the Bastion Host
-output "bastion_host_public_ip" {
-  description = "The public IP of the Bastion Host"
-  value       = aws_instance.bastion_host.public_ip
 }
 
 # Private Subnet 1
@@ -176,9 +164,8 @@ resource "aws_instance" "private_instance_2" {
 
 # Allocate an Elastic IP for the NAT Gateway
 resource "aws_eip" "nat_eip" {
-  domain = "vpc"  # Use the updated attribute
+  domain = "vpc"
 }
-
 
 # NAT Gateway in the Public Subnet
 resource "aws_nat_gateway" "nat" {
@@ -211,4 +198,21 @@ resource "aws_route" "private_route" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [destination_cidr_block]
+  }
+}
+
+# Output the public subnet ID
+output "public_subnet_id" {
+  description = "The ID of the public subnet"
+  value       = aws_subnet.public_subnet.id
+}
+
+# Output the public IP of the Bastion Host
+output "bastion_host_public_ip" {
+  description = "The public IP of the Bastion Host"
+  value       = aws_instance.bastion_host.public_ip
 }
