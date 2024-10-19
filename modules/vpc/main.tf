@@ -193,15 +193,14 @@ resource "aws_route_table_association" "private_subnet_2_association" {
   route_table_id = aws_route_table.private.id
 }
 
-# Route for Private Subnet to Use NAT Gateway
+# Route for Private Subnet to Use NAT Gateway (With Fix)
 resource "aws_route" "private_route" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
 
   lifecycle {
-    create_before_destroy = true
-    ignore_changes = [destination_cidr_block]
+    ignore_changes = [destination_cidr_block]  # Prevent duplicate route error
   }
 }
 
